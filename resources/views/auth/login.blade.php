@@ -8,11 +8,16 @@
     pageUrl='{{ url()->full() }}'
     pageHeading='Sign In'
 >
+    {{-- View container --}}
     <main class="flex items-center justify-center mb-20">
+        {{-- Login form --}}
         <div class="w-full max-w-[300px] my-10">
             <form class="flex flex-col items-center">
+            {{-- CSRF token --}}
             @csrf
             
+
+            {{-- Form fields --}}
             <div class="relative w-[300px] mb-6">
                 <x-labeled-input
                     inputId="Email"
@@ -44,6 +49,8 @@
                 </label>
             </div>
 
+
+            {{-- Buttons and links --}}
             <x-button type="submit">
                 <i class="fas fa-lock mr-1"></i> Login
             </x-button>

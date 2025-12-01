@@ -51,9 +51,11 @@
     </head>
 
     
+    {{-- Visual elements --}}
     <body class="h-full">
         <div x-data="{ sidebarOpen: false }" class="flex h-screen overflow-hidden bg-gray-100">
             <div class="hidden md:flex md:flex-shrink-0 bg-gray-900 text-white w-80 flex-col">
+                {{-- Site branding --}}
                 <a href="/accounts/dashboard">
                     <div class="flex items-center h-16 px-4">
                         <img src="{{ asset('logo.png') }}" alt="Clementine Solutions" class="size-8 mr-2 flex-none" />
@@ -65,6 +67,8 @@
 
                 <hr class="border-white/10 my-4" />
 
+
+                {{-- Sidebar menu (desktop) --}}
                 <nav class="flex-1 px-4 py-6 space-y-2 text-sm overflow-y-auto">
                     <x-link
                         href="/dashboard"
@@ -75,6 +79,8 @@
                     </x-link>
                 </nav>
 
+
+                {{-- Profile info --}}
                 <a href="/accounts/profile">
                     <div class="px-4 py-4 border-t border-white/10 flex items-center space-x-3">
                         <img src="{{ asset('default-profile-picture.png') }}" alt="Profile picture" class="size-8 rounded-full outline outline-white/10 flex-none" />
@@ -86,6 +92,8 @@
                 </a>
             </div>
 
+
+            {{-- Sidebar menu (mobile) --}}
             <div x-show="sidebarOpen" x-transition class="fixed inset-0 z-40 flex md:hidden">
                 <div class="bg-gray-900 text-white w-64 flex flex-col">
                     <div class="flex items-center h-16 px-4">
@@ -107,6 +115,8 @@
                 <div @click="sidebarOpen = false" class="flex-shrink-0 w-full bg-black bg-opacity-50"></div>
             </div>
 
+
+            {{-- User menu --}}
             <div class="flex flex-col flex-1 overflow-hidden">
                 <header class="flex items-center justify-between bg-white shadow px-4 py-3 md:px-6">
                     <div class="flex items-center space-x-2">
@@ -150,10 +160,14 @@
                     </div>
                 </header>
 
+
+                {{-- Slotted content --}}
                 <main class="flex-1 overflow-y-auto px-4 py-6 sm:px-6 lg:px-8">
                     {{ $slot }}
                 </main>
 
+
+                {{-- Auth footer --}}
                 <footer class="mt-12 bg-gray-900 text-white px-6 py-5 text-sm">
                     <div class="max-w-7xl mx-auto flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-6 sm:space-y-0">
                         <div class="flex flex-wrap justify-center sm:justify-start gap-x-6 gap-y-2 text-white/80">

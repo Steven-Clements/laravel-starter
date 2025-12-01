@@ -8,7 +8,9 @@
     pageUrl='{{ url()->full() }}'
     pageHeading='Registration Successful'
 >
+    {{-- View container --}}
     <main class="bg-gray-100">
+        {{-- Registration success card --}}
         <div class="bg-white shadow-md rounded-md p-6 max-w-md mx-auto mb-16">
             <x-notification-card
                 heading="Registration Successful"
@@ -19,6 +21,8 @@
             </x-notification-card>
         </div>
 
+
+        {{-- Request verification card --}}
         <div class="bg-white shadow-md rounded-md p-6 max-w-md mx-auto mb-16">
             <x-notification-card
                 heading="Resend Verification Code"
@@ -26,7 +30,15 @@
             >
                 <p class="mb-10">Didn't receive a code?</p>
 
-                <form class="space-y-4">
+                {{-- Request verification email --}}
+                <form
+                    method="POST"
+                    action="resend-verification"
+                    class="space-y-4"
+                >
+                    {{-- CSRF token --}}
+                    @csrf
+
                     <div class="relative w-full">
                         <x-labeled-input
                             inputId="Email"
@@ -38,6 +50,7 @@
                         </x-labeled-input>
                     </div>
 
+                    {{-- Buttons --}}
                     <x-button type="submit">
                         Send New Code
                     </x-button>

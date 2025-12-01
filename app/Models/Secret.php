@@ -12,31 +12,29 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Model;
 
 /**
- * User
+ * Secret
  * —————————————————————————————————————————————————————————————————————————————
  * Specifies how properties are treated by the Database Abstraction Layer (DAL).
  */
-class User extends Authenticatable implements MustVerifyEmail
+class Secret extends Model
 {
-    use HasFactory, Notifiable;
-
+    use HasFactory;
 
     /**
      * @param array $fillable
      * Specifies which properties can be mass assigned.
      */
     protected $fillable = [
-        'profile_picture',
-        'name',
-        'username',
-        'email',
-        'password',
+        'user_id',
+        'type',
+        'public_key',
+        'private_key',
+        'recovery_keys',
+        'expires_at'
     ];
 
 
@@ -45,11 +43,9 @@ class User extends Authenticatable implements MustVerifyEmail
      * Specifies which properties are hidden by default.
      */
     protected $hidden = [
-        'password',
-        'secret_pin',
-        'enrolled_mfa_methods',
-        'remember_token',
-        'last_login_ip'
+        'private_key',
+        'recovery_keys',
+        'rotated_at'
     ];
 
 
@@ -63,13 +59,10 @@ class User extends Authenticatable implements MustVerifyEmail
     protected function casts(): array
     {
         return [
-            'email_verified_at' => 'datetime',
-            'phone_verified_at' => 'datetime',
-            'password' => 'hashed',
-            'is_mfa_enabled' => 'boolean',
-            'enrolled_mfa_methods' => 'array',
-            'secret_pin' => 'hashed',
-            'last_login_at' => 'datetime'
+            'private_key' => 'hashed',
+            'expires_at' => 'datetime',
+            'rotated_at' => 'datetime',
+            'last_used_at' => 'datetime'
         ];
     }
 }

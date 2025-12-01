@@ -10,12 +10,13 @@
  * @copyright   © 2025-2026 Clementine Solutions. All Rights Reserved.
  */
 
+use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 /**
- * Defines the properties comprising the cache resource.
+ * Defines the properties comprising the user resource.
  */
 return new class extends Migration
 {
@@ -26,19 +27,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        /* —— ⦿ —— ⦿ —— ⦿ —— { Cache table } —— ⦿ —— ⦿ —— ⦿ —— */
-        Schema::create('cache', function (Blueprint $table) {
-            $table->string('key')->primary();
-            $table->mediumText('value');
-            $table->integer('expiration');
-        });
-
-
-        /* —— ⦿ —— ⦿ —— ⦿ —— { Cache locks table } —— ⦿ —— ⦿ —— ⦿ —— */
-        Schema::create('cache_locks', function (Blueprint $table) {
-            $table->string('key')->primary();
-            $table->string('owner');
-            $table->integer('expiration');
+        /* —— ⦿ —— ⦿ —— ⦿ —— { Secrets table } —— ⦿ —— ⦿ —— ⦿ —— */
+        Schema::create('secrets', function (Blueprint $table) {
+            $table->id();
+            $table->foreignIdFor(model: User::class);
+            $table->enum('type', ['sms-voice', 'totp', 'passkey', 'recovery'])->default('totp');
+            $table->string('public_key')->nullable();
+            $table->string('private_key')->nullable();
+            $table->json('recovery_keys')->nullable();
+            $table->timestamp('expires_at')->nullable();
+            $table->timestamp('rotated_at')->nullable();
+            $table->timestamp('last_used_at')->nullable();
+            $table->timestamps();
         });
     }
 
@@ -50,7 +50,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('cache');
-        Schema::dropIfExists('cache_locks');
+        Schema::dropIfExists('secrets');
     }
 };
