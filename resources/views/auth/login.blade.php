@@ -27,7 +27,7 @@
                     inputId="Email"
                     id="emailOrUsername"
                     name="emailOrUsername"
-                    type="email"
+                    type="text"
                     required
                 >
                     Email or Username
@@ -63,11 +63,12 @@
 
 
             {{-- Buttons and links --}}
-            <x-button type="submit">
+            <x-button
+                variant="info"
+                type="submit">
                 <i class="fas fa-lock mr-1"></i> Login
             </x-button>
             <x-button
-                variant="alternate"
                 :isLink="true"
             >
                 <i class="fas fa-circle-question mr-1"></i> Account Help

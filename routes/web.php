@@ -11,7 +11,9 @@
  */
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\MfaController;
 use App\Http\Controllers\UserController;
+use App\Http\Middleware\LoginThrottle;
 use Illuminate\Support\Facades\Route;
 
 /* —————————————————————————————————————————————————————————————————————————— *\
@@ -38,7 +40,14 @@ Route::get('/email/verify/{id}/{hash}', [AuthController::class, 'verify'])
 | Authentication routes                                                        |
 \* —————————————————————————————————————————————————————————————————————————— */
 Route::get('/login', [AuthController::class, 'create'])->name('login');
-Route::post('/auth/login', [AuthController::class, 'store']);
+Route::post('/auth/login', [AuthController::class, 'store'])
+    ->middleware(LoginThrottle::class);
+
+
+/* —————————————————————————————————————————————————————————————————————————— *\
+| Multi-factor routes                                                          |
+\* —————————————————————————————————————————————————————————————————————————— */
+Route::get('/multi-factor', [MfaController::class, 'index']);
 
 
 /* —————————————————————————————————————————————————————————————————————————— *\
