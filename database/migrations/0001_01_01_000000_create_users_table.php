@@ -28,7 +28,7 @@ return new class extends Migration
     {
         /* —— ⦿ —— ⦿ —— ⦿ —— { Users table } —— ⦿ —— ⦿ —— ⦿ —— */
         Schema::create('users', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
             $table->enum('status', ['active', 'locked', 'suspended', 'banned'])->default('active');
             $table->string('profile_picture')->default('profile-picture.png');
             $table->string('name');

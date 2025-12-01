@@ -15,15 +15,15 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\View\View;
-use Mockery\Undefined;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * Auth Controller
  * —————————————————————————————————————————————————————————————————————————————
- * Defines create, read, update, and delete (CRUD) functionality authentication
- * and verification.
+ * Defines create, read, update, and delete (CRUD) functionality for
+ * authentication and verification operations.
  */
 class AuthController extends Controller
 {
@@ -99,14 +99,10 @@ class AuthController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        /* —— ⦿ —— ⦿ —— ⦿ —— { Helper variables } —— ⦿ —— ⦿ —— ⦿ —— */
-        $method = 'email';
-
-
         /* —— ⦿ —— ⦿ —— ⦿ —— { Validate request } —— ⦿ —— ⦿ —— ⦿ —— */
         $validatedData = $request->validate([
             'emailOrUsername' => ['required'],
-            'password' => ['required', 'min:8']
+            'password' => ['required']
         ]);
 
 
@@ -118,33 +114,29 @@ class AuthController extends Controller
 
         /* —— ⦿ —— ⦿ —— ⦿ —— { Check if user exists } —— ⦿ —— ⦿ —— ⦿ —— */
         if (!$user) {
-            abort(401, 'Invalid email address or password');
+            return back()
+                ->withErrors(['password' => 'Invalid identifier or password.']);
         }
 
 
-        /* —— ⦿ —— ⦿ —— ⦿ —— { Account for no email } —— ⦿ —— ⦿ —— ⦿ —— */
-        if (!$user->email) {
-            $method = 'username';
-        } else {
-            /* —— ⦿ —— ⦿ —— ⦿ —— { Check if email verified } —— ⦿ —— ⦿ —— ⦿ —— */
-            if (!$user->hasVerifiedEmail()) {
-                abort(403, 'Please verify your email address before logging in.');
-            }
+        /* —— ⦿ —— ⦿ —— ⦿ —— { Check that email is verified } —— ⦿ —— ⦿ —— ⦿ —— */
+        if ($user->email && !$user->hasVerifiedEmail()) {
+            return back()
+                ->withErrors(['password' => 'Please verify your email address before logging in.']);
         }
 
 
         /* —— ⦿ —— ⦿ —— ⦿ —— { Verify password entry } —— ⦿ —— ⦿ —— ⦿ —— */
-        if (!Auth::validate([
-            $method => $validatedData['emailOrUsername'],
-            'password' => $validatedData['password'],
-            'status' => 'active'
-        ])) {
-            abort(401, 'Invalid email address or password.');
+        if (!Hash::check($validatedData['password'], $user->password) || $user->status !== 'active') {
+            return back()
+                ->withErrors(['password' => 'Invalid identifier or password.']);
         }
 
 
         if ($user->is_mfa_enabled) {
-            dd('multi-factor required...');
+            /* —— ⦾ —— ⦾ —— ⦾ —— { Create MFA cookie } —— ⦾ —— ⦾ —— ⦾ —— */
+            return redirect('/multi-factor', 302)
+                ->with('user', $user);
         }
 
 

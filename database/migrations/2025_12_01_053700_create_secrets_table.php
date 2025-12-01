@@ -29,7 +29,7 @@ return new class extends Migration
     {
         /* —— ⦿ —— ⦿ —— ⦿ —— { Secrets table } —— ⦿ —— ⦿ —— ⦿ —— */
         Schema::create('secrets', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
             $table->foreignIdFor(model: User::class);
             $table->enum('type', ['sms-voice', 'totp', 'passkey', 'recovery'])->default('totp');
             $table->string('public_key')->nullable();

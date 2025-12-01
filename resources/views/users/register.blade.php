@@ -113,7 +113,8 @@
 
 
             {{-- Buttons and links --}}
-            <x-button 
+            <x-button
+                variant="info"
                 type="submit"
             >
                 <i class="fas fa-pen mr-1"></i> Register
