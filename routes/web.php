@@ -38,6 +38,7 @@ Route::get('/email/verify/{id}/{hash}', [AuthController::class, 'verify'])
 | Authentication routes                                                        |
 \* —————————————————————————————————————————————————————————————————————————— */
 Route::get('/login', [AuthController::class, 'create'])->name('login');
+Route::post('/auth/login', [AuthController::class, 'store']);
 
 
 /* —————————————————————————————————————————————————————————————————————————— *\
