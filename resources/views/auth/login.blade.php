@@ -12,7 +12,11 @@
     <main class="flex items-center justify-center mb-20">
         {{-- Login form --}}
         <div class="w-full max-w-[300px] my-10">
-            <form class="flex flex-col items-center">
+            <form
+                method="POST"
+                action="/auth/login"
+                class="flex flex-col items-center"
+            >
             {{-- CSRF token --}}
             @csrf
             
@@ -21,13 +25,17 @@
             <div class="relative w-[300px] mb-6">
                 <x-labeled-input
                     inputId="Email"
-                    id="email"
-                    name="email"
+                    id="emailOrUsername"
+                    name="emailOrUsername"
                     type="email"
                     required
                 >
-                    Email
+                    Email or Username
                 </x-labeled-input>
+
+                @error('emailOrUsername')
+                    <div>{{ $message }}</div>
+                @enderror
             </div>
 
             <div class="relative w-[300px] mb-6">
@@ -40,6 +48,10 @@
                 >
                     Password
                 </x-labeled-input>
+
+                @error('password')
+                    <div>{{ $message }}</div>
+                @enderror
             </div>
 
             <div class="relative w-[300px] mb-6 flex justify-center">

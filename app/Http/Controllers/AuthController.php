@@ -14,7 +14,9 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
+use Mockery\Undefined;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
@@ -35,6 +37,7 @@ class AuthController extends Controller
      */
     public function notice(): View
     {
+        /* —— ⦿ —— ⦿ —— ⦿ —— { Render verification notice } —— ⦿ —— ⦿ —— ⦿ —— */
         return view('verification.notice');
     }
 
@@ -49,18 +52,25 @@ class AuthController extends Controller
      * The asserted verification token.
      * @return void
      */
-    public function verify($id, $hash): RedirectResponse
+    public function verify(string $id, string $hash, Request $request): RedirectResponse
     {
+        /* —— ⦿ —— ⦿ —— ⦿ —— { Search database for user } —— ⦿ —— ⦿ —— ⦿ —— */
         $user = User::findOrFail($id);
 
-        if (! hash_equals((string) $hash, sha1($user->getEmailForVerification()))) {
+
+        /* —— ⦿ —— ⦿ —— ⦿ —— { Verify token submission } —— ⦿ —— ⦿ —— ⦿ —— */
+        if (!hash_equals((string) $hash, sha1($user->getEmailForVerification()))) {
             abort(403, 'Invalid verification link.');
         }
 
+
+        /* —— ⦿ —— ⦿ —— ⦿ —— { Render login form } —— ⦿ —— ⦿ —— ⦿ —— */
         if (! $user->hasVerifiedEmail()) {
             $user->markEmailAsVerified();
         }
 
+
+        /* —— ⦿ —— ⦿ —— ⦿ —— { Redirect to login } —— ⦿ —— ⦿ —— ⦿ —— */
         return redirect('/login')->with('status', 'Email verified!');
     }
 
@@ -87,8 +97,68 @@ class AuthController extends Controller
      * Data and parameters from the incoming HTTP request.
      * @return void
      */
-    public function store(): RedirectResponse
+    public function store(Request $request): RedirectResponse
     {
+        /* —— ⦿ —— ⦿ —— ⦿ —— { Helper variables } —— ⦿ —— ⦿ —— ⦿ —— */
+        $method = 'email';
+
+
+        /* —— ⦿ —— ⦿ —— ⦿ —— { Validate request } —— ⦿ —— ⦿ —— ⦿ —— */
+        $validatedData = $request->validate([
+            'emailOrUsername' => ['required'],
+            'password' => ['required', 'min:8']
+        ]);
+
+
+        /* —— ⦿ —— ⦿ —— ⦿ —— { Search database for user } —— ⦿ —— ⦿ —— ⦿ —— */
+        $user = User::where('email', $validatedData['emailOrUsername'])
+            ->orWhere('username', $validatedData['emailOrUsername'])
+            ->first();
+
+
+        /* —— ⦿ —— ⦿ —— ⦿ —— { Check if user exists } —— ⦿ —— ⦿ —— ⦿ —— */
+        if (!$user) {
+            abort(401, 'Invalid email address or password');
+        }
+
+
+        /* —— ⦿ —— ⦿ —— ⦿ —— { Account for no email } —— ⦿ —— ⦿ —— ⦿ —— */
+        if (!$user->email) {
+            $method = 'username';
+        } else {
+            /* —— ⦿ —— ⦿ —— ⦿ —— { Check if email verified } —— ⦿ —— ⦿ —— ⦿ —— */
+            if (!$user->hasVerifiedEmail()) {
+                abort(403, 'Please verify your email address before logging in.');
+            }
+        }
+
+
+        /* —— ⦿ —— ⦿ —— ⦿ —— { Verify password entry } —— ⦿ —— ⦿ —— ⦿ —— */
+        if (!Auth::validate([
+            $method => $validatedData['emailOrUsername'],
+            'password' => $validatedData['password'],
+            'status' => 'active'
+        ])) {
+            abort(401, 'Invalid email address or password.');
+        }
+
+
+        if ($user->is_mfa_enabled) {
+            dd('multi-factor required...');
+        }
+
+
+        /* —— ⦿ —— ⦿ —— ⦿ —— { Start new session } —— ⦿ —— ⦿ —— ⦿ —— */
+        Auth::login($user);
+        $request->session()->regenerate();
+
+
+        /* —— ⦿ —— ⦿ —— ⦿ —— { Update user login data } —— ⦿ —— ⦿ —— ⦿ —— */
+        $user->last_login_ip = $request->ip();
+        $user->last_login_at = now();
+        $user->save();
+
+
         /* —— ⦿ —— ⦿ —— ⦿ —— { Redirect to dashboard } —— ⦿ —— ⦿ —— ⦿ —— */
         return redirect('/accounts/dashboard');
     }
