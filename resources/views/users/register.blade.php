@@ -8,14 +8,19 @@
     pageUrl='{{ url()->full() }}'
     pageHeading='Sign Up'
 >
+    {{-- View container --}}
     <main class="flex items-center justify-center bg-gray-100">
+        {{-- Register form --}}
         <form
             method="POST"
             action="/users"
             class="bg-white shadow-md rounded-md p-8 w-full max-w-2xl"
         >
+            {{-- CSRF token --}}
             @csrf
 
+
+            {{-- Upload profile picture --}}
             <div class="flex items-center justify-center gap-10 mb-8">
                 <div class="w-24 h-24 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden">
                     <span class="text-gray-500 text-sm">Upload</span>
@@ -28,8 +33,9 @@
                 @enderror
             </div>
 
+
+            {{-- Form fields --}}
             <div class="grid grid-cols-1 md:grid-cols-2 gap-10 my-6">
-            
                 <div class="relative w-full">
                     <x-labeled-input
                         inputId="Name"
@@ -105,6 +111,8 @@
                 </div>
             </div>
 
+
+            {{-- Buttons and links --}}
             <x-button 
                 type="submit"
             >

@@ -8,5 +8,8 @@
     pageType='website'
     pageHeading='Dashboard'
 >
+    {{-- View container --}}
+    <main>
 
+    </main>
 </x-auth-layout>

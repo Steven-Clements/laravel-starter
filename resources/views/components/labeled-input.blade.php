@@ -1,7 +1,9 @@
+{{-- Component properties --}}
 @props([
     'inputId' => ''
 ])
 
+{{-- Form input --}}
 <input
     {{ $attributes->merge(
         attributeDefaults: [
@@ -10,6 +12,8 @@
     }}
 />
 
+
+{{-- Form label --}}
 <label
     for="{{ $inputId }}"
     class="absolute left-0 top-2 text-gray-500 transition-all peer-focus:text-orange-500 peer-focus:-translate-y-5 peer-valid:text-orange-500 peer-valid:-translate-y-5"

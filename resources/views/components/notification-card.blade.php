@@ -1,9 +1,11 @@
+{{-- Component properties --}}
 @props([
     'heading' => '',
     'variant' => 'success'
 ])
 
 
+{{-- Success notifications --}}
 @if ($variant === "success")
     <div class="flex items-center space-x-3 mb-4">
         <div class="flex-shrink-0 w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center">
@@ -13,6 +15,8 @@
     </div>
 @endif
 
+
+{{-- Retry notifications --}}
 @if ($variant === 'retry')
     <div class="flex items-center space-x-3 mb-4">
         <div class="flex-shrink-0 w-10 h-10 rounded-full bg-yellow-100 flex items-center justify-center">
@@ -23,4 +27,5 @@
 @endif
 
 
+{{-- Slotted content --}}
 {{ $slot }}

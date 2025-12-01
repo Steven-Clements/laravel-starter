@@ -51,12 +51,14 @@
     </head>
 
     
+    {{-- Visual elements --}}
     <body class="h-full">
         <div class="min-h-full">
             <nav x-data="{ mobileOpen: false }" class="bg-gray-900">
                 <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <div class="flex h-16 items-center justify-between">
                         <div class="flex items-center">
+                            {{-- Site branding --}}
                             <a href="/">
                                 <div class="shrink-0 flex items-center">
                                     <img src="{{ asset('logo.png') }}" alt="Clementine Solutions logo" class="size-10" />
@@ -64,6 +66,7 @@
                                 </div>
                             </a>
 
+                            {{-- Guest menu (Desktop) --}}
                             <div class="hidden md:block ml-10">
                                 <div class="flex items-baseline space-x-4">
                                     <x-link
@@ -106,6 +109,7 @@
                         </div>
                         
 
+                        {{-- User menu (desktop) --}}
                         <div class="hidden md:flex items-center space-x-4">
                             <button type="button" class="rounded-full p-1 text-gray-400 hover:text-white focus:outline-none">
                                 <span class="sr-only">View notifications</span>
@@ -163,6 +167,8 @@
                             </div>
                         </div>
 
+
+                        {{-- Guest menu (mobile) --}}
                         <div class="md:hidden">
                             <button @click="mobileOpen = !mobileOpen"
                                     class="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:text-white hover:bg-white/5 focus:outline-none"
@@ -279,18 +285,23 @@
                 </div>
             </nav>
 
+
+            {{-- Guest header --}}
             <header class="bg-white shadow-sm mt-20">
                 <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
                     <h1 class="text-3xl font-bold tracking-tight text-center text-gray-700 mt-10">{{ $pageHeading }}</h1>
                 </div>
             </header>
 
+
+            {{-- Slotted content --}}
             <main>
                 <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
                     {{ $slot }}
                 </div>
             </main>
 
+            {{-- Guest footer --}}
             <footer class="bg-gray-900 text-gray-300">
                 <div class="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
                     <div class="grid grid-cols-1 md:grid-cols-5 gap-6">

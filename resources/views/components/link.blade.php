@@ -1,9 +1,11 @@
+{{-- Component properties --}}
 @props([
     'type' => 'main-menu',
     'active' => false
 ])
 
 
+{{-- Main menu link --}}
 @if ($type === 'main-menu')
     <a {{ $attributes->merge([
         'class' => $active ?
@@ -16,6 +18,7 @@
 @endif
 
 
+{{-- Sub-menu links --}}
 @if ($type === 'sub-menu')
     <a {{ $attributes->merge([
         'class' => $active ?
@@ -27,6 +30,8 @@
     </a>
 @endif
 
+
+{{-- Footer menu links --}}
 @if ($type === 'footer-menu')
     <a {{ $attributes->merge([
         'class' => $active ?
