@@ -48,6 +48,8 @@ Route::post('/auth/login', [AuthController::class, 'store'])
 | Multi-factor routes                                                          |
 \* —————————————————————————————————————————————————————————————————————————— */
 Route::get('/multi-factor', [MfaController::class, 'index']);
+Route::get('/multi-factor/setup/totp', [MfaController::class, 'setupTotp']);
+Route::post('/multi-factor/verify/totp', [MfaController::class, 'verifyTotp']);
 
 
 /* —————————————————————————————————————————————————————————————————————————— *\
