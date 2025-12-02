@@ -48,7 +48,11 @@ Route::post('/auth/login', [AuthController::class, 'store'])
 | Multi-factor routes                                                          |
 \* —————————————————————————————————————————————————————————————————————————— */
 Route::get('/multi-factor', [MfaController::class, 'index']);
+Route::post('/multi-factor/send-sms', [MfaController::class, 'sendSms']);
+Route::get('/multi-factor/setup/sms', [MfaController::class, 'setupSms']);
 Route::get('/multi-factor/setup/totp', [MfaController::class, 'setupTotp']);
+Route::get('/multi-factor/verify/sms', [MfaController:: class, 'renderSms']);
+Route::post('/multi-factor/verify/sms', [MfaController::class, 'verifySms']);
 Route::post('/multi-factor/verify/totp', [MfaController::class, 'verifyTotp']);
 
 
