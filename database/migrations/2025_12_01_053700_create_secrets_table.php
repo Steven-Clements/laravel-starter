@@ -32,8 +32,8 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->foreignIdFor(model: User::class);
             $table->enum('type', ['sms-voice', 'totp', 'passkey', 'recovery'])->default('totp');
-            $table->string('public_key')->nullable();
-            $table->string('private_key')->nullable();
+            $table->text('public_key')->nullable();
+            $table->text('private_key')->nullable();
             $table->json('recovery_keys')->nullable();
             $table->timestamp('expires_at')->nullable();
             $table->timestamp('rotated_at')->nullable();

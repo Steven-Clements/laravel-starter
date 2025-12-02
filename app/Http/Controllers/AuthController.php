@@ -134,9 +134,12 @@ class AuthController extends Controller
 
 
         if ($user->is_mfa_enabled) {
-            /* —— ⦾ —— ⦾ —— ⦾ —— { Create MFA cookie } —— ⦾ —— ⦾ —— ⦾ —— */
-            return redirect('/multi-factor', 302)
-                ->with('user', $user);
+            /* —— ⦾ —— ⦾ —— ⦾ —— { Create temporary MFA key } —— ⦾ —— ⦾ —— ⦾ —— */
+            $request->session()->put('mfa_user_id', $user->id);
+
+
+            /* —— ⦾ —— ⦾ —— ⦾ —— { Redirect to multi-factor } —— ⦾ —— ⦾ —— ⦾ —— */
+            return redirect('/multi-factor');
         }
 
 
@@ -152,6 +155,6 @@ class AuthController extends Controller
 
 
         /* —— ⦿ —— ⦿ —— ⦿ —— { Redirect to dashboard } —— ⦿ —— ⦿ —— ⦿ —— */
-        return redirect('/accounts/dashboard');
+        return redirect('/dashboard');
     }
 }
